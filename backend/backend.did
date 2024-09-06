@@ -1,0 +1,33 @@
+type TravelInfo = 
+ record {
+   bestTimeToVisit: text;
+   climate: text;
+   description: text;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: Recommendations;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: TravelInfo;
+ };
+type Recommendations = vec Recommendation;
+type Recommendation = 
+ record {
+   accommodation: text;
+   activity: text;
+   place: text;
+ };
+service : {
+  addTravelInfo: (text, TravelInfo) -> (Result_2);
+  getRecommendations: (text) -> (Result_1);
+  getTravelInfo: (text) -> (Result);
+}
