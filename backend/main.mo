@@ -53,7 +53,6 @@ actor {
   };
 
   func generateRecommendations(destination: Text) : Recommendations {
-    // This is a placeholder function. In a real application, this would contain logic to generate recommendations.
     [
       { activity = "Visit " # destination # " Museum"; place = destination # " City Center"; accommodation = "Hotel " # destination },
       { activity = "Explore " # destination # " Park"; place = destination # " Nature Reserve"; accommodation = "Hostel " # destination },
@@ -61,15 +60,29 @@ actor {
     ]
   };
 
+  func initializeTravelInfo() {
+    let initialData = [
+      ("Paris", { description = "The City of Light"; climate = "Temperate"; bestTimeToVisit = "Spring or Fall" }),
+      ("New York", { description = "The Big Apple"; climate = "Humid subtropical"; bestTimeToVisit = "Spring or Fall" }),
+      ("Tokyo", { description = "A mix of traditional and ultramodern"; climate = "Humid subtropical"; bestTimeToVisit = "Spring or Fall" })
+    ];
+    
+    for ((destination, info) in initialData.vals()) {
+      travelInfoStore := Array.append(travelInfoStore, [(destination, info)]);
+    };
+  };
+
   system func preupgrade() {
-    // Convert HashMap to array for stable storage
     tempRecommendationsStore := Iter.toArray(recommendationsCache.entries());
   };
 
   system func postupgrade() {
-    // Reinitialize HashMap from stable array
     for ((destination, recommendations) in tempRecommendationsStore.vals()) {
       recommendationsCache.put(destination, recommendations);
+    };
+    
+    if (Array.size(travelInfoStore) == 0) {
+      initializeTravelInfo();
     };
   };
 }

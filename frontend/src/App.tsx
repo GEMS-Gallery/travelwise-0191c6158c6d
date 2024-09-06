@@ -29,6 +29,7 @@ function App() {
         setRecommendations(result.ok);
       } else {
         console.error('Error fetching recommendations:', result.err);
+        setRecommendations(null);
       }
 
       const infoResult = await backend.getTravelInfo(data.destination);
@@ -36,9 +37,12 @@ function App() {
         setTravelInfo(infoResult.ok);
       } else {
         console.error('Error fetching travel info:', infoResult.err);
+        setTravelInfo({ description: "No information available", climate: "Unknown", bestTimeToVisit: "Any time" });
       }
     } catch (error) {
       console.error('Error:', error);
+      setRecommendations(null);
+      setTravelInfo({ description: "Error fetching information", climate: "Unknown", bestTimeToVisit: "Any time" });
     } finally {
       setLoading(false);
     }
